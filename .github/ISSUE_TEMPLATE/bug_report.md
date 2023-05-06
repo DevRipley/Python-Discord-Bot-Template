@@ -1,30 +1,37 @@
 ---
 name: Bug report
-about: Create a report to help improve the template
+about: Create a report to help us improve
 title: ''
-labels: ''
+labels: bug
 assignees: ''
 
 ---
 
-**Describe the bug**
+### **Describe the bug**
 A clear and concise description of what the bug is.
 
-**To Reproduce**
+### **To Reproduce**
 Steps to reproduce the behavior:
-1. Given the following code ...
-2. Using the following command '...'
-3. Given the following arguments '...'
+1. Go to '...'
+2. Click on '....'
+3. Scroll down to '....'
 4. See error
 
-**Expected behavior**
+And if applicable paste your code in a nice embed.
+
+### **Expected behavior**
 A clear and concise description of what you expected to happen.
 
-**Screenshots**
+### **Actual behavior**
+A clear and concise description of what is happening.
+
+### **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
-**Template Version**
-The version of the template that you are using.
+### **Environment**
+ - Operating System `ex: MacOS Monterey version 12.1; arm (apple M1)`
+ - Python version `ex: python3.10.1`
+ - Dependencies versions
 
-**Additional context**
+### **Additional context**
 Add any other context about the problem here.

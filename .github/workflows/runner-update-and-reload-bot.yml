@@ -1,0 +1,41 @@
+# auto-run github-runner on boot/startup: https://docs.github.com/en/actions/hosting-your-own-runners/configuring-the-self-hosted-runner-application-as-a-service
+name: "Update files & Reload bot on Linux server"
+
+on:
+  push:
+    paths:
+      - 'classes/**'
+      - 'cogs/**'
+      - 'config/**'
+      - 'views/**'
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  update-and-reload:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Dependencies Update
+        id: dependencies-update
+        run: |
+          pip3.11 install -r requirements.txt
+          echo "Dependencies Update: Success"
+      - name: Setup Credentials
+        id: setup-credentials
+        run: |
+          apt-get install jq -y
+          jq '.token = "${{ secrets.DISCORD_TOKEN }}"' config/bot.json > tmp.$$.json && mv tmp.$$.json config/bot.json
+          jq '.server.host = "${{ secrets.DATABASE_HOST }}" | .server.user = "${{ secrets.DATABASE_USER }}" | .server.password = "${{ secrets.DATABASE_PASSWORD }}" | .server.database = "${{ secrets.DATABASE_DATABASE }}"' config/database.json > tmp.$$.json && mv tmp.$$.json config/database.json
+          jq '.reddit.client.client_id = "${{ secrets.REDDIT_ID }}" | .reddit.client.client_secret = "${{ secrets.REDDIT_SECRET }}"' config/cogs.json > tmp.$$.json && mv tmp.$$.json config/cogs.json
+          echo "Setup Credentials: Success"
+      - name: Reload Bot
+        id: reload-bot
+        if: success()
+        run: |
+          python3.11 classes/client.py --message "reload"
+          echo "Reload Bot: Success"
